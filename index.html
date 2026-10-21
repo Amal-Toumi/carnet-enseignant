@@ -80,7 +80,7 @@ body.deco-meca .card{background:var(--cardt)}
 <main id="app"></main>
 <script>
 (()=>{
-const REAL=!!window.claude,APP_V='2026-10-21 v11',SWOK=!REAL&&'serviceWorker' in navigator&&/^https?:$/.test(location.protocol);
+const REAL=!!window.claude,APP_V='2026-10-21 v12',SWOK=!REAL&&'serviceWorker' in navigator&&/^https?:$/.test(location.protocol);
 if(!REAL){window.claude={use:async n=>n==='downloads'?{save:async({filename,data})=>{const b=new Blob([data],{type:/\.pdf$/.test(filename)?'application/pdf':/\.json$/.test(filename)?'application/json':/\.ics$/.test(filename)?'text/calendar':'application/octet-stream'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);return{status:'saved'}}}:null}}
 const qrMake=(()=>{
  const EXP=new Uint8Array(256),LOG=new Uint8Array(256);{let x=1;for(let i=0;i<255;i++){EXP[i]=x;LOG[x]=i;x<<=1;if(x&256)x^=0x11d}EXP[255]=EXP[0]}
@@ -692,7 +692,7 @@ function render(){
  document.body.classList.toggle('deco-meca',!!(D&&D.profile&&D.profile.filiere==='Génie mécanique'));
  if(D)applyTheme(D.settings.theme||'auto');
  if(D&&V==='home')cbEnsure();
- $('#lk').innerHTML=D&&S?`<span class="mut">${esc(S.a.name)}</span> <button class="btn ghost" data-act="lock">${t('lock')}</button>`:'';
+ $('#lk').innerHTML=D&&S?`<button class="btn ghost" data-go="profile" aria-label="${t('profile')}">👤 ${esc(S.a.name)}</button> <button class="btn ghost" data-act="lock">${t('lock')}</button>`:'';
  if(!D){$('#nav').innerHTML='';$('#app').innerHTML=(flash?`<div class="note">${esc(flash)}</div>`:'')+updBan()+vLogin();return}
  {const gv=V==='stu'?'rep':V,G=NG.find(x=>x[1].includes(gv))||NG[0];$('#nav').innerHTML=`<div class="nr">${NG.map(([k,vs])=>`<button data-go="${vs[0]}"${vs.includes(gv)?' aria-current="page"':''}>${t(k)}</button>`).join('')}</div>`+(G[1].length>1?`<div class="nr sub">${G[1].map(v=>`<button data-go="${v}"${gv===v?' aria-current="page"':''}>${t(v)}</button>`).join('')}</div>`:'')}
  const age=D.settings.lastBackupAt?(Date.now()-Date.parse(D.settings.lastBackupAt))/864e5:null;
