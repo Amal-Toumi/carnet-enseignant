@@ -80,7 +80,7 @@ body.deco-meca .card{background:var(--cardt)}
 <main id="app"></main>
 <script>
 (()=>{
-const REAL=!!window.claude,APP_V='2026-10-21 v17',SWOK=!REAL&&'serviceWorker' in navigator&&/^https?:$/.test(location.protocol);
+const REAL=!!window.claude,APP_V='2026-10-21 v18',SWOK=!REAL&&'serviceWorker' in navigator&&/^https?:$/.test(location.protocol);
 if(!REAL){window.claude={use:async n=>n==='downloads'?{save:async({filename,data})=>{const b=new Blob([data],{type:/\.pdf$/.test(filename)?'application/pdf':/\.json$/.test(filename)?'application/json':/\.ics$/.test(filename)?'text/calendar':'application/octet-stream'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);return{status:'saved'}}}:null}}
 const qrMake=(()=>{
  const EXP=new Uint8Array(256),LOG=new Uint8Array(256);{let x=1;for(let i=0;i<255;i++){EXP[i]=x;LOG[x]=i;x<<=1;if(x&256)x^=0x11d}EXP[255]=EXP[0]}
@@ -228,7 +228,7 @@ const blank=()=>({format:'tca',schemaVersion:1,id:uid(),createdAt:now(),updatedA
  classes:[],groups:[],students:[],timetables:[],curricula:[],annotations:{},plans:{},progress:{},weekPlans:{},reports:{},extras:[],ownPlans:{},placements:[],obsLogs:[],studentLog:[],cbReminders:[],
  settings:{cbPerWeek:2,pacing:{mode:'spread'},scope:{level:'',classId:'',groupId:'',mode:'single'},workingDays:[1,2,3,4,5,6],language:'fr',anonymizeExports:true,lastBackupAt:null,theme:'auto',sync:{prov:'none',auto:true,repo:'',token:'',path:'',gcid:''}}});
 const merge=(x,y)=>{for(const k in y){const v=y[k];if(v&&typeof v==='object'&&!Array.isArray(v))x[k]=merge(x[k]&&typeof x[k]==='object'&&!Array.isArray(x[k])?x[k]:{},v);else x[k]=v}return x};
-const migrate=d=>{const r=merge(blank(),d);r.schemaVersion=1;return r};
+const migrate=d=>{const r=merge(blank(),d);r.schemaVersion=1;const m=new Map();(r.curricula||[]).forEach(c=>{const o=m.get(c.id);if(!o||(o.deleted&&!c.deleted)||(!!o.deleted===!!c.deleted&&(c.updatedAt||'')>(o.updatedAt||'')))m.set(c.id,c)});r.curricula=[...m.values()];return r};
 const enc=new TextEncoder(),dec=new TextDecoder(),IT=250000,AK='tca:accts';
 const b64=u=>{u=new Uint8Array(u);let s='';for(let i=0;i<u.length;i+=32768)s+=String.fromCharCode.apply(null,u.subarray(i,i+32768));return btoa(s)};
 const ub=s=>Uint8Array.from(atob(s),c=>c.charCodeAt(0));
@@ -746,7 +746,7 @@ const act={
  async curExp(id){const c=D.curricula.find(x=>x.id===id),txt=JSON.stringify({format:'tca-curriculum',v:1,id:c.id,filiere:c.filiere,level:c.level,label:c.label,statedTotal:c.statedTotal,locked:c.locked,competencies:c.competencies,themes:c.themes},null,2),fn='programme-'+(c.filiere+'-'+c.level).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[^a-z0-9]+/g,'-')+'.json';cux=null;
   try{const dl=window.claude?await claude.use('downloads'):null;if(!dl)throw{code:'unavailable'};await dl.save({filename:fn,data:txt});flash=t('exported')}catch(e){if(e&&e.code==='declined')flash=t('declined');else{cux=txt;flash=t('exportFallback')}}render()},
  curApply(){const j=curPend,T=now(),c={id:j.id||uid(),filiere:j.filiere||'',level:j.level||'',label:j.label||'',statedTotal:+j.statedTotal||0,locked:j.locked!==false,competencies:j.competencies||{},themes:(j.themes||[]).map(x=>({id:x.id||uid(),title:x.title||'',axis:x.axis||'',hours:+x.hours||0,type:x.type||'course',comp:x.comp||[],skills:x.skills||[],items:x.items||[],acts:x.acts||[],crit:x.crit||[]})),createdAt:T,updatedAt:T,deleted:false};
-  D.curricula.forEach(o=>{if(!o.deleted&&o.locked&&c.locked&&o.level===c.level&&o.filiere===c.filiere)o.deleted=true});D.curricula.push(c);
+  D.curricula=D.curricula.filter(o=>o.id!==c.id);D.curricula.forEach(o=>{if(!o.deleted&&o.locked&&c.locked&&o.level===c.level&&o.filiere===c.filiere)o.deleted=true});D.curricula.push(c);
   if(c.level&&!D.profile.levels.includes(c.level))D.profile.levels.push(c.level);D.settings.scope.level=c.level;curPend=null;save();flash=t('curDone');render()},
  async curSave(){await flush();curEd=false;flash=t('curSaved');render();scrollTo(0,0)},
  curNo(){curPend=null;render()},
