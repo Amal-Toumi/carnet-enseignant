@@ -80,7 +80,7 @@ body.deco-meca .card{background:var(--cardt)}
 <main id="app"></main>
 <script>
 (()=>{
-const REAL=!!window.claude,APP_V='2026-10-21 v15',SWOK=!REAL&&'serviceWorker' in navigator&&/^https?:$/.test(location.protocol);
+const REAL=!!window.claude,APP_V='2026-10-21 v16',SWOK=!REAL&&'serviceWorker' in navigator&&/^https?:$/.test(location.protocol);
 if(!REAL){window.claude={use:async n=>n==='downloads'?{save:async({filename,data})=>{const b=new Blob([data],{type:/\.pdf$/.test(filename)?'application/pdf':/\.json$/.test(filename)?'application/json':/\.ics$/.test(filename)?'text/calendar':'application/octet-stream'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);return{status:'saved'}}}:null}}
 const qrMake=(()=>{
  const EXP=new Uint8Array(256),LOG=new Uint8Array(256);{let x=1;for(let i=0;i<255;i++){EXP[i]=x;LOG[x]=i;x<<=1;if(x&256)x^=0x11d}EXP[255]=EXP[0]}
@@ -748,7 +748,7 @@ const act={
  curApply(){const j=curPend,T=now(),c={id:j.id||uid(),filiere:j.filiere||'',level:j.level||'',label:j.label||'',statedTotal:+j.statedTotal||0,locked:j.locked!==false,competencies:j.competencies||{},themes:(j.themes||[]).map(x=>({id:x.id||uid(),title:x.title||'',axis:x.axis||'',hours:+x.hours||0,type:x.type||'course',comp:x.comp||[],skills:x.skills||[],items:x.items||[],acts:x.acts||[],crit:x.crit||[]})),createdAt:T,updatedAt:T,deleted:false};
   D.curricula.forEach(o=>{if(!o.deleted&&o.locked&&c.locked&&o.level===c.level&&o.filiere===c.filiere)o.deleted=true});D.curricula.push(c);
   if(c.level&&!D.profile.levels.includes(c.level))D.profile.levels.push(c.level);D.settings.scope.level=c.level;curPend=null;save();flash=t('curDone');render()},
- async curSave(){await flush();flash=t('curSaved');render();scrollTo(0,0)},
+ async curSave(){await flush();curEd=false;flash=t('curSaved');render();scrollTo(0,0)},
  curNo(){curPend=null;render()},
  newCur(){const T=now();D.curricula.push({id:uid(),filiere:D.profile.filiere||'',level:actLv()||'3ème',label:'',statedTotal:0,locked:false,competencies:{},themes:[],createdAt:T,updatedAt:T,deleted:false});curEd=true;save();render()},
  delCur(id){const c=D.curricula.find(x=>x.id===id);if(c){c.deleted=true;c.updatedAt=now();curEd=false;save()}render()},
@@ -870,7 +870,9 @@ document.addEventListener('change',e=>{const el=e.target;
  else if(el.id==='f'&&el.files[0]){const fl=el.files[0],pw0=(document.querySelector('#ip')||{}).value||'',r=new FileReader();r.onload=()=>{pkgTxt=String(r.result);pkgName=fl.name;flash=t('fileOk');render();const q=document.querySelector('#ip');if(q)q.value=pw0};r.onerror=()=>{flash=t('readErr');render()};r.readAsText(fl)}});
 document.addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.id==='lg-p')act.doLogin()});
 document.addEventListener('toggle',e=>{const d=e.target,k=d&&d.dataset&&d.dataset.k;if(k&&Date.now()-RT>150)OPEN.set(k,d.open)},true);
+let INT=null;document.addEventListener('input',e=>{const el=e.target;if(el.dataset&&(el.dataset.cm||el.dataset.th||el.dataset.an||el.dataset.wp)){clearTimeout(INT);INT=setTimeout(()=>el.dispatchEvent(new Event('change',{bubbles:true})),500)}});
 document.addEventListener('click',e=>{
+ const ae=document.activeElement;if(ae&&/^(INPUT|TEXTAREA)$/.test(ae.tagName)&&ae.type!=='file'&&e.target.closest('[data-act],[data-go]'))ae.blur();
  const g=e.target.closest('[data-go]');
  if(g){V=g.dataset.go;flash='';arm=false;xt=null;pend=null;render();scrollTo(0,0);return}
  const dy=e.target.closest('[data-day]');if(dy){sel=dy.dataset.day;render();return}
