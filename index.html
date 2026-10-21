@@ -80,7 +80,7 @@ body.deco-meca .card{background:var(--cardt)}
 <main id="app"></main>
 <script>
 (()=>{
-const REAL=!!window.claude,APP_V='2026-10-21 v9',SWOK=!REAL&&'serviceWorker' in navigator&&/^https?:$/.test(location.protocol);
+const REAL=!!window.claude,APP_V='2026-10-21 v10',SWOK=!REAL&&'serviceWorker' in navigator&&/^https?:$/.test(location.protocol);
 if(!REAL){window.claude={use:async n=>n==='downloads'?{save:async({filename,data})=>{const b=new Blob([data],{type:/\.pdf$/.test(filename)?'application/pdf':/\.json$/.test(filename)?'application/json':'application/octet-stream'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);return{status:'saved'}}}:null}}
 const qrMake=(()=>{
  const EXP=new Uint8Array(256),LOG=new Uint8Array(256);{let x=1;for(let i=0;i<255;i++){EXP[i]=x;LOG[x]=i;x<<=1;if(x&256)x^=0x11d}EXP[255]=EXP[0]}
@@ -292,9 +292,11 @@ const vStu=()=>{const s=D.students.find(x=>x.id===stuId&&!x.deleted);
 <section class="card"><h2>${t('stuHist')}</h2>${L.length||inc.length?`<ul class="list">${L.map(x=>`<li><span><b>${fdm(x.date)}</b> ${t(SLL[x.type]||'slNoteO')}${x.text?' — '+esc(x.text):''}</span><button class="btn ghost" data-act="stuDel" data-id="${x.id}">${stuArm===x.id?t('delSure'):t('rm')}</button></li>`).join('')}${inc.map(x=>`<li class="mut"><span><b>${fdm(x.d)}</b> ${esc(x.tx)} <i class="k-start">${t('stuFromRep')}</i></span></li>`).join('')}</ul>`:`<p class="mut">${t('stuEmpty')}</p>`}</section>`};
 const vHome=()=>{const p=D.profile.name&&D.institution.name;
  const chip=(c,x)=>`<span class="chip ${c}">${x}</span>`,row=(l,c)=>`<li><span>${t(l)}</span>${c}</li>`;
- return`<section class="card"><h1>${D.profile.name?t('hello')+', '+esc(D.profile.name):t('welcome')}</h1><p>${t('intro')}</p></section>${cbCard()}
-<section class="card"><h2>${t('setup')}</h2><ul class="list">${row('sProfile',p?chip('ok',t('done')):chip('todo',t('todo')))}${row('sBackup',D.settings.lastBackupAt?chip('ok',fmt(D.settings.lastBackupAt)):chip('todo',t('never')))}${row('sCal',CAL().length?chip('ok',t('done')):chip('todo',t('todo')))}${row('sTT',TTS().some(x=>x.slots.length)?chip('ok',t('done')):chip('todo',t('todo')))}${row('sCur',CUR().length?chip('ok',t('done')):chip('todo',t('todo')))}</ul>
-<div class="row"><button class="btn" data-go="profile">${t('openProfile')}</button><button class="btn ghost" data-go="backup">${t('openBackup')}</button></div></section>`};
+ const bk=!!D.settings.lastBackupAt,ca=CAL().length>0,tt=TTS().some(x=>x.slots.length),cu=CUR().length>0,left=[];
+ if(!p)left.push(row('sProfile',chip('todo',t('todo'))));if(!bk)left.push(row('sBackup',chip('todo',t('never'))));if(!ca)left.push(row('sCal',chip('todo',t('todo'))));if(!tt)left.push(row('sTT',chip('todo',t('todo'))));if(!cu)left.push(row('sCur',chip('todo',t('todo'))));
+ return`<section class="card"><h1>${D.profile.name?t('hello')+', '+esc(D.profile.name):t('welcome')}</h1>${p?'':`<p>${t('intro')}</p>`}</section>${cbCard()}
+${left.length?`<section class="card"><h2>${t('setup')}</h2><ul class="list">${left.join('')}</ul>
+<div class="row">${p?'':`<button class="btn" data-go="profile">${t('openProfile')}</button>`}${bk?'':`<button class="btn ghost" data-go="backup">${t('openBackup')}</button>`}</div></section>`:''}`};
 
 const pad=n=>String(n).padStart(2,'0'),dstr=(y,m,d)=>y+'-'+pad(m+1)+'-'+pad(d),at=s=>new Date(s+'T12:00:00');
 const rng=e=>e.s?[e.s,e.e&&e.e>=e.s?e.e:e.s]:null;
