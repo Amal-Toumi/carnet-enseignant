@@ -68,18 +68,17 @@ body.deco-meca .card{background:var(--cardt)}
 .ls{display:flex;align-items:center;gap:8px;margin:3px 0;padding:6px 8px;border-radius:8px;border-inline-start:6px solid transparent;font-size:14px;cursor:pointer}.ls small{margin-inline-start:auto;opacity:.8;white-space:nowrap}.ls input{flex:none;margin:0}
 .ls-done{background:rgba(148,163,184,.3);color:var(--mut);border-color:#94a3b8}.ls-now{background:#bbf7d0;color:#14532d;border-color:#16a34a}.ls-b1{background:#dbeafe;color:#1e3a8a;border-color:#93c5fd}.ls-b2{background:#93c5fd;color:#0f2a5c;border-color:#3b82f6}.ls-b3{background:#3b82f6;color:#fff;border-color:#1d4ed8}.ls-b4{background:#0b1220;color:#e6e9f5;border-color:#475569}.ls-y1{background:#fef08a;color:#713f12;border-color:#eab308}.ls-y2{background:#fdba74;color:#7c2d12;border-color:#f97316}.ls-y3{background:#fca5a5;color:#7f1d1d;border-color:#dc2626}
 .lsleg{display:flex;flex-wrap:wrap;gap:4px;margin-block:6px}.lsleg .ls{margin:0;padding:3px 8px;font-size:12px;cursor:default}details.lst{margin-block:6px}details.lst>summary{cursor:pointer;font-weight:600;padding:4px 0}
-.stu{background:none;border:0;padding:0;font:inherit;font-weight:600;color:var(--pen);text-decoration:underline;text-underline-offset:3px;cursor:pointer;text-align:start}.sig{margin:36px 0 90px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;font-family:"Segoe Script","Bradley Hand","Snell Roundhand","Lucida Handwriting","Apple Chancery","Brush Script MT","Comic Sans MS",cursive;font-size:11px;line-height:1.4;color:var(--mut);opacity:.85}.sig .sl{text-align:left;max-width:60%}.sig .sr{font-family:system-ui,sans-serif;font-size:9px;letter-spacing:.06em;text-transform:uppercase;text-align:center;border:1.5px solid var(--mut);border-radius:4px;padding:3px 7px;transform:rotate(-3deg);opacity:.8;line-height:1.3}.sig svg{display:inline-block;vertical-align:-3px}.sig .hr{width:11px;height:11px;fill:var(--margin);stroke:none}.sig .ul{display:block;margin:3px auto 0;width:120px;height:14px;fill:none;stroke:var(--mut);stroke-width:1.4;stroke-linecap:round}@media print{.sig{display:none}}
+.stu{background:none;border:0;padding:0;font:inherit;font-weight:600;color:var(--pen);text-decoration:underline;text-underline-offset:3px;cursor:pointer;text-align:start}.sig{margin:36px 0 28px;display:flex;justify-content:space-between;align-items:flex-end;gap:12px;font-family:"Segoe Script","Bradley Hand","Snell Roundhand","Lucida Handwriting","Apple Chancery","Brush Script MT","Comic Sans MS",cursive;font-size:11px;line-height:1.4;color:var(--mut);opacity:.85}.sig .sl{text-align:left;max-width:60%}.sig .sr{font-family:system-ui,sans-serif;font-size:9px;letter-spacing:.06em;text-transform:uppercase;text-align:center;border:1.5px solid var(--mut);border-radius:4px;padding:3px 7px;transform:rotate(-3deg);opacity:.8;line-height:1.3}.sig svg{display:inline-block;vertical-align:-3px}.sig .hr{width:11px;height:11px;fill:var(--margin);stroke:none}.sig .ul{display:block;margin:3px auto 0;width:120px;height:14px;fill:none;stroke:var(--mut);stroke-width:1.4;stroke-linecap:round}@media print{.sig{display:none}}
 @media print{#deco{display:none!important}}
 .colh{display:flex;justify-content:space-between;align-items:center;width:100%;background:none;border:0;padding:0;font:inherit;font-weight:600;font-size:17px;color:var(--pen);cursor:pointer;text-align:start}.colb[hidden]{display:none}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 .hint{margin:8px 0;font-size:14px}.hint summary{cursor:pointer;color:var(--mut)}.hint p{margin:6px 0}
 .ib{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:start;margin:4px 0;padding:9px 10px;border:1px solid var(--rule);border-radius:8px;background:transparent;color:inherit;font:inherit;cursor:pointer}.ib b{min-width:1.3em}.ib.s-d{border-color:var(--pen)}.ib.s-i{border-style:dashed;border-color:var(--pen)}.tgs{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.tg{border:1px solid var(--rule);background:transparent;color:inherit;border-radius:999px;padding:6px 12px;font:inherit;font-size:14px;cursor:pointer}.tg.on{background:var(--pen);color:var(--paper);border-color:var(--pen)}
 
-main{padding-bottom:110px}
-#tabs{position:fixed;inset-inline:0;bottom:0;z-index:12;display:flex;justify-content:center;gap:6px;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));background:var(--card);border-block-start:2px solid var(--margin);box-shadow:0 -4px 14px rgba(0,0,0,.12)}
+#tabs{display:flex;gap:6px;margin:8px 0 6px}
 #tabs:empty{display:none}
-#tabs button{flex:1 1 0;max-width:170px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 4px;border:0;border-radius:14px;background:transparent;color:var(--mut);font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
-#tabs button .ti{font-size:22px;line-height:1.1}
+#tabs button{flex:1 1 0;display:flex;flex-direction:column;align-items:center;gap:1px;padding:5px 2px;border:1.5px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--mut);font:inherit;font-size:12px;font-weight:600;cursor:pointer}
+#tabs button .ti{font-size:19px;line-height:1.1}
 #tabs button[aria-current]{background:var(--pen);color:var(--paper);box-shadow:0 2px 8px rgba(0,0,0,.2)}
 nav#nav .nr.sub{background:none;border-radius:0;gap:2px;margin-block-start:2px}
 nav#nav .nr.sub button{font-size:13px;padding:6px 10px;border-radius:0}
@@ -89,12 +88,11 @@ details.cc{margin:0}details.cc>summary{cursor:pointer;list-style:none;font-size:
 </head>
 <body>
 <div id="deco"></div>
-<header><div class="top"><div class="brand">Carnet d’enseignement</div><span id="lk"></span></div><nav id="nav"></nav></header>
+<header><div class="top"><div class="brand">Carnet d’enseignement</div><span id="lk"></span></div><nav id="tabs" aria-label="Menu principal"></nav><nav id="nav"></nav></header>
 <main id="app"></main>
-<nav id="tabs" aria-label="Menu principal"></nav>
 <script>
 (()=>{
-const REAL=!!window.claude,APP_V='2026-10-22 v27',SWOK=!REAL&&'serviceWorker' in navigator&&/^https?:$/.test(location.protocol);
+const REAL=!!window.claude,APP_V='2026-10-22 v28',SWOK=!REAL&&'serviceWorker' in navigator&&/^https?:$/.test(location.protocol);
 if(!REAL){window.claude={use:async n=>n==='downloads'?{save:async({filename,data})=>{const b=new Blob([data],{type:/\.pdf$/.test(filename)?'application/pdf':/\.json$/.test(filename)?'application/json':/\.ics$/.test(filename)?'text/calendar':'application/octet-stream'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);return{status:'saved'}}}:null}}
 const qrMake=(()=>{
  const EXP=new Uint8Array(256),LOG=new Uint8Array(256);{let x=1;for(let i=0;i<255;i++){EXP[i]=x;LOG[x]=i;x<<=1;if(x&256)x^=0x11d}EXP[255]=EXP[0]}
@@ -871,7 +869,7 @@ function render(){RT=Date.now();
  if(D&&V==='home')cbEnsure();
  $('#lk').innerHTML=D&&S?`<button class="btn ghost" data-go="profile" aria-label="${t('profile')}">👤 ${esc(S.a.name)}</button> <button class="btn ghost" data-act="lock">${t('lock')}</button>`:'';
  if(!D){$('#nav').innerHTML='';$('#tabs').innerHTML='';$('#app').innerHTML=(flash?`<div class="note">${esc(flash)}</div>`:'')+updBan()+vLogin();return}
- {const gv=V==='stu'?'rep':V,PV=['profile','school','appinfo'].includes(V),G=PV?null:(NG.find(x=>x[1].includes(gv))||NG[0]);$('#tabs').innerHTML=NG.map(([k,vs],i)=>`<button data-go="${vs[0]}"${!PV&&vs.includes(gv)?' aria-current="page"':''}><span class="ti">${['🏠','📅','📈','⚙️'][i]}</span><span>${t(k)}</span></button>`).join('');$('#nav').innerHTML=(PV?`<div class="nr sub">${[['profile','pTeacher'],['school','pSchool'],['appinfo','pApp']].map(([v,k])=>`<button data-go="${v}"${V===v?' aria-current="page"':''}>${t(k)}</button>`).join('')}</div>`:G[1].length>1?`<div class="nr sub">${G[1].map(v=>`<button data-go="${v}"${gv===v?' aria-current="page"':''}>${t(v)}</button>`).join('')}</div>`:'')}
+ {const gv=V==='stu'?'rep':V,PV=['profile','school','appinfo'].includes(V),G=PV?null:(NG.find(x=>x[1].includes(gv))||NG[0]);$('#tabs').innerHTML=NG.map(([k,vs],i)=>`<button data-go="${vs[0]}"${!PV&&vs.includes(gv)?' aria-current="page"':''}><span class="ti">${['📝','📚','📊','⚙️'][i]}</span><span>${t(k)}</span></button>`).join('');$('#nav').innerHTML=(PV?`<div class="nr sub">${[['profile','pTeacher'],['school','pSchool'],['appinfo','pApp']].map(([v,k])=>`<button data-go="${v}"${V===v?' aria-current="page"':''}>${t(k)}</button>`).join('')}</div>`:G[1].length>1?`<div class="nr sub">${G[1].map(v=>`<button data-go="${v}"${gv===v?' aria-current="page"':''}>${t(v)}</button>`).join('')}</div>`:'')}
  const age=D.settings.lastBackupAt?(Date.now()-Date.parse(D.settings.lastBackupAt))/864e5:null;
  const b=!ok?t('noStore'):S.a.mustChange?t('tmpPw'):(hasData()&&(age===null||age>7))?t('remind'):'';
  $('#app').innerHTML=(flash?`<div class="note">${esc(flash)}</div>`:'')+updBan()+(b?`<div class="warn">${b}</div>`:'')+hintCard(V)+(V==='home'?vHome():V==='calendar'?vCal():V==='week'?vWeek():V==='classes'?vClasses():V==='cur'?vCur():V==='plan'?vPlan():V==='prep'?vPrep():V==='rep'?vRep():V==='adv'?vAdv():V==='obs'?vObs():V==='share'?vShare():V==='stu'?vStu():V==='profile'?vProfile():V==='school'?vSchool():V==='appinfo'?vAppInfo():vBackup());
