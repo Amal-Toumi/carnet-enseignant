@@ -80,8 +80,8 @@ body.deco-meca .card{background:var(--cardt)}
 #tabs button{flex:1 1 0;display:flex;flex-direction:column;align-items:center;gap:1px;padding:5px 2px;border:1.5px solid var(--rule);border-radius:12px;background:var(--paper);color:var(--mut);font:inherit;font-size:12px;font-weight:600;cursor:pointer}
 #tabs button .ti{font-size:19px;line-height:1.1}
 #tabs button[aria-current]{background:var(--pen);color:var(--paper);box-shadow:0 2px 8px rgba(0,0,0,.2)}
-nav#nav .nr.sub{background:none;border-radius:0;gap:2px;margin-block-start:2px}
-nav#nav .nr.sub button{font-size:13px;padding:6px 10px;border-radius:0}
+nav#nav .nr.sub{background:none;border-radius:0;gap:6px;margin-block:4px 8px;padding:0 0 8px;overflow-x:auto}
+nav#nav .nr.sub button{flex:1 1 0;font-size:13px;font-weight:600;padding:7px 8px;border:1.5px solid var(--rule);border-radius:10px;background:var(--paper);color:var(--mut);white-space:nowrap;box-shadow:none}nav#nav .nr.sub button[aria-current]{border-color:var(--pen);color:var(--pen);background:color-mix(in srgb,var(--pen) 12%,var(--paper))}
 header{padding-block-end:0}
 details.cc{margin:0}details.cc>summary{cursor:pointer;list-style:none;font-size:17px;font-weight:600;color:var(--pen);display:flex;justify-content:space-between;align-items:center;gap:8px;padding:2px 0;letter-spacing:-.01em}details.cc>summary::-webkit-details-marker{display:none}details.cc>summary::after{content:"▾";color:var(--mut);transition:transform .15s}details.cc:not([open])>summary::after{transform:rotate(-90deg)}details.cc[open]>summary{margin-block-end:8px}
 </style>
@@ -92,7 +92,7 @@ details.cc{margin:0}details.cc>summary{cursor:pointer;list-style:none;font-size:
 <main id="app"></main>
 <script>
 (()=>{
-const REAL=!!window.claude,APP_V='2026-10-22 v28',SWOK=!REAL&&'serviceWorker' in navigator&&/^https?:$/.test(location.protocol);
+const REAL=!!window.claude,APP_V='2026-10-22 v29',SWOK=!REAL&&'serviceWorker' in navigator&&/^https?:$/.test(location.protocol);
 if(!REAL){window.claude={use:async n=>n==='downloads'?{save:async({filename,data})=>{const b=new Blob([data],{type:/\.pdf$/.test(filename)?'application/pdf':/\.json$/.test(filename)?'application/json':/\.ics$/.test(filename)?'text/calendar':'application/octet-stream'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);return{status:'saved'}}}:null}}
 const qrMake=(()=>{
  const EXP=new Uint8Array(256),LOG=new Uint8Array(256);{let x=1;for(let i=0;i<255;i++){EXP[i]=x;LOG[x]=i;x<<=1;if(x&256)x^=0x11d}EXP[255]=EXP[0]}
@@ -205,7 +205,7 @@ openProfile:'Compléter le profil',openBackup:'Sauvegarder mes données',
 levels:'Niveaux enseignés',days:'Jours de travail',mentors:'Mentors',addMentor:'Ajouter un mentor',remove:'Retirer',
 noMentor:'Aucun mentor pour l’instant. Vous pouvez en ajouter plusieurs.',
 'm.name':'Nom','m.subject':'Matière','m.institution':'Établissement','m.contact':'Contact (facultatif)',
-prefs:'Préférences',anon:'Masquer les noms des élèves dans les exports (recommandé)',
+prefs:'Préférences',anon:'Masquer les noms des élèves dans les exports (recommandé)',keepOpen:'Mémoriser les cartes ouvertes ou fermées (désactivé : tout se rouvre quand je quitte la page)',
 stor:'Stockage',onDevice:'Les données sont enregistrées sur cet appareil, dans ce navigateur.',
 persY:'Protection contre l’effacement automatique : active.',
 persN:'Protection contre l’effacement automatique : non garantie. Faites des sauvegardes régulières.',
@@ -520,7 +520,7 @@ const curEditor=c=>{
  const f=(x,k,lab,ty)=>`<label>${lab}<input${ty?` type='${ty}'`:''} data-th='${c.id}|${x.id}|${k}' value='${esc(Array.isArray(x[k])?x[k].join(', '):x[k])}'></label>`;
  const ta=(x,k,lab)=>`<label>${lab} (${t('lstHelp')})<textarea rows='4' data-th='${c.id}|${x.id}|${k}'>${esc((x[k]||[]).join('\n'))}</textarea></label>`;
  return`<section class='card'><h2>${t('curEdit')}</h2><p class='mut'>${t('curAuto')}</p><label>${t('profile.filiere')}<input data-cm='${c.id}|filiere' value='${esc(c.filiere)}'></label><label>${t('clsLevel')}<input data-cm='${c.id}|level' value='${esc(c.level)}'></label><label>${t('curLabel')}<input data-cm='${c.id}|label' value='${esc(c.label)}'></label><label>${t('stTotal')}<input type='number' data-cm='${c.id}|statedTotal' value='${esc(c.statedTotal||'')}'></label>${c.themes.map(x=>`<details class='sub' data-k='e-${x.id}'${op('e-'+x.id,false)}><summary>${esc(x.title||t('thTitle'))} <span class='mut'>${x.hours||0} h</span></summary>${f(x,'title',t('thTitle'))}${f(x,'axis',t('axis'))}${f(x,'hours',t('hrs'),'number')}<label>${t('ttype')}<select data-th='${c.id}|${x.id}|type'>${[['course','tCourse'],['project','tProj'],['research','tRes']].map(([v,k])=>`<option value='${v}'${x.type===v?' selected':''}>${t(k)}</option>`).join('')}</select></label>${f(x,'comp',t('comp'))}${f(x,'skills',t('skills'))}${ta(x,'items',t('savoirs'))}${ta(x,'acts',t('acts'))}${ta(x,'crit',t('crit'))}<label>${t('partsLbl')}<textarea rows='5' data-th='${c.id}|${x.id}|parts'>${esc((x.parts||[]).map(p=>p.title+' | '+(p.kw||[]).join(', ')).join('\n'))}</textarea></label><div class='row'><button class='btn ghost' data-act='upTh' data-id='${c.id}|${x.id}'>${t('up')}</button><button class='btn ghost' data-act='dnTh' data-id='${c.id}|${x.id}'>${t('dn')}</button><button class='btn danger' data-act='delTh' data-id='${c.id}|${x.id}'>${t('delTh')}</button></div></details>`).join('')}<button class='btn' data-act='addTh' data-id='${c.id}'>${t('addTh')}</button> <button class='btn' data-act='curSave'>${t('curSave')}</button> <button class='btn danger' data-act='delCur' data-id='${c.id}'>${t('delCur')}</button></section>`};
-let RT=0;const OPEN=new Map(),op=(k,d)=>(OPEN.has(k)?OPEN.get(k):d)?' open':'';
+let RT=0;const OPEN=new Map();let LASTV=null;const op=(k,d)=>(OPEN.has(k)?OPEN.get(k):true)?' open':'';
 const sec=(k,ti,h)=>h?`<details class='sec' data-k='${k}'${op(k,false)}><summary>${ti}</summary>${h}</details>`:'';
 const ulb=a=>ul('',a).replace("<p class='lab'></p>",'');
 const curPendCard=()=>curPend?`<section class='card'><p>${t('curReady')}<b>${esc(curPend.filiere||'')} ${esc(curPend.level||'')}</b> ${esc(curPend.label||'')} (${(curPend.themes||[]).length} ${t('themes')})</p><button class='btn' data-act='curApply'>${t('curApply')}</button> <button class='btn ghost' data-act='curNo'>${t('cancel')}</button></section>`:'';
@@ -760,7 +760,7 @@ const vProfile=()=>{
  const dy=[['Lun',1],['Mar',2],['Mer',3],['Jeu',4],['Ven',5],['Sam',6],['Dim',0]].map(([l,v])=>chk('settings.workingDays',v,l,1)).join('');
  return`<section class="card"><h2>${t('s.profile')}</h2>${input('profile.name')}${input('profile.status')}${input('profile.subject','sel',specOpts(D.profile.subject))}${D.profile.subject==='Autre'?input('profile.subjectOther'):''}${input('profile.filiere','sel',['','Génie mécanique','Génie électrique','Autre'])}<p class="lab">${t('levels')}</p><div class="row">${lv}</div></section>
 <section class="card"><h2>${t('mentors')}</h2>${mentorsHtml()}<button class="btn ghost" data-act="addM">${t('addMentor')}</button></section>
-<section class="card"><h2>${t('prefs')}</h2><p class="lab">${t('days')}</p><div class="row">${dy}</div><label class="chk" style="margin-block-start:14px"><input type="checkbox" data-b="settings.anonymizeExports"${D.settings.anonymizeExports?' checked':''}>${t('anon')}</label></section>${sig()}`};
+<section class="card"><h2>${t('prefs')}</h2><p class="lab">${t('days')}</p><div class="row">${dy}</div><label class="chk" style="margin-block-start:14px"><input type="checkbox" data-b="settings.anonymizeExports"${D.settings.anonymizeExports?' checked':''}>${t('anon')}</label><label class="chk" style="margin-block-start:10px"><input type="checkbox" data-b="settings.keepOpen"${D.settings.keepOpen!==false?' checked':''}>${t('keepOpen')}</label></section>${sig()}`};
 const vSchool=()=>{return`<section class="card"><h2>${t('s.institution')}</h2>${['name','address','city','governorate'].map(k=>input('institution.'+k)).join('')}${input('profile.schoolYear')}</section>
 <section class="card"><h2>${t('s.regional')}</h2>${input('regional.directorate')+input('regional.speciality','sel',specOpts(D.regional.speciality))+input('regional.inspector')}</section>`};
 const guideCard=()=>`<section class="card"><details class="sec" data-k="guide"${op('guide',true)}><summary><b>Guide : à quoi sert l’appli</b></summary>
@@ -861,9 +861,9 @@ const vBackup=()=>{const pe=pers===true?'persY':pers===false?'persN':'persU';
 function collapseCards(){if(!D||['home','stu'].includes(V))return;let n=0;const seen={};
  document.querySelectorAll('#app > section.card').forEach(c=>{const h=c.firstElementChild;if(!h||h.tagName!=='H2'||c.classList.contains('kp')||c.children.length<3)return;n++;
   const base='cc-'+V+'-'+(h.textContent||'').trim().slice(0,40);seen[base]=(seen[base]||0)+1;const key=base+(seen[base]>1?'-'+seen[base]:'');
-  const d=document.createElement('details'),s=document.createElement('summary');d.className='cc';d.dataset.k=key;if(OPEN.has(key)?OPEN.get(key):(n<=1||c.classList.contains('o')))d.open=true;
+  const d=document.createElement('details'),s=document.createElement('summary');d.className='cc';d.dataset.k=key;if(OPEN.has(key)?OPEN.get(key):true)d.open=true;
   while(h.firstChild)s.append(h.firstChild);h.remove();d.append(s);while(c.firstChild)d.append(c.firstChild);c.append(d)})}
-function render(){RT=Date.now();
+function render(){RT=Date.now();if(LASTV!==null&&LASTV!==V&&D&&D.settings.keepOpen===false)OPEN.clear();LASTV=V;
  document.body.classList.toggle('deco-meca',!!(D&&D.profile&&D.profile.filiere==='Génie mécanique'));
  if(D)applyTheme(D.settings.theme||'auto');
  if(D&&V==='home')cbEnsure();
