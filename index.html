@@ -74,15 +74,27 @@ body.deco-meca .card{background:var(--cardt)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 .hint{margin:8px 0;font-size:14px}.hint summary{cursor:pointer;color:var(--mut)}.hint p{margin:6px 0}
 .ib{display:flex;gap:10px;align-items:flex-start;width:100%;text-align:start;margin:4px 0;padding:9px 10px;border:1px solid var(--rule);border-radius:8px;background:transparent;color:inherit;font:inherit;cursor:pointer}.ib b{min-width:1.3em}.ib.s-d{border-color:var(--pen)}.ib.s-i{border-style:dashed;border-color:var(--pen)}.tgs{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0}.tg{border:1px solid var(--rule);background:transparent;color:inherit;border-radius:999px;padding:6px 12px;font:inherit;font-size:14px;cursor:pointer}.tg.on{background:var(--pen);color:var(--paper);border-color:var(--pen)}
+
+main{padding-bottom:110px}
+#tabs{position:fixed;inset-inline:0;bottom:0;z-index:12;display:flex;justify-content:center;gap:6px;padding:8px 10px calc(8px + env(safe-area-inset-bottom,0px));background:var(--card);border-block-start:2px solid var(--margin);box-shadow:0 -4px 14px rgba(0,0,0,.12)}
+#tabs:empty{display:none}
+#tabs button{flex:1 1 0;max-width:170px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 4px;border:0;border-radius:14px;background:transparent;color:var(--mut);font:inherit;font-size:12.5px;font-weight:600;cursor:pointer}
+#tabs button .ti{font-size:22px;line-height:1.1}
+#tabs button[aria-current]{background:var(--pen);color:var(--paper);box-shadow:0 2px 8px rgba(0,0,0,.2)}
+nav#nav .nr.sub{background:none;border-radius:0;gap:2px;margin-block-start:2px}
+nav#nav .nr.sub button{font-size:13px;padding:6px 10px;border-radius:0}
+header{padding-block-end:0}
+details.cc{margin:0}details.cc>summary{cursor:pointer;list-style:none;font-size:17px;font-weight:600;color:var(--pen);display:flex;justify-content:space-between;align-items:center;gap:8px;padding:2px 0;letter-spacing:-.01em}details.cc>summary::-webkit-details-marker{display:none}details.cc>summary::after{content:"▾";color:var(--mut);transition:transform .15s}details.cc:not([open])>summary::after{transform:rotate(-90deg)}details.cc[open]>summary{margin-block-end:8px}
 </style>
 </head>
 <body>
 <div id="deco"></div>
 <header><div class="top"><div class="brand">Carnet d’enseignement</div><span id="lk"></span></div><nav id="nav"></nav></header>
 <main id="app"></main>
+<nav id="tabs" aria-label="Menu principal"></nav>
 <script>
 (()=>{
-const REAL=!!window.claude,APP_V='2026-10-22 v25',SWOK=!REAL&&'serviceWorker' in navigator&&/^https?:$/.test(location.protocol);
+const REAL=!!window.claude,APP_V='2026-10-22 v26',SWOK=!REAL&&'serviceWorker' in navigator&&/^https?:$/.test(location.protocol);
 if(!REAL){window.claude={use:async n=>n==='downloads'?{save:async({filename,data})=>{const b=new Blob([data],{type:/\.pdf$/.test(filename)?'application/pdf':/\.json$/.test(filename)?'application/json':/\.ics$/.test(filename)?'text/calendar':'application/octet-stream'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);return{status:'saved'}}}:null}}
 const qrMake=(()=>{
  const EXP=new Uint8Array(256),LOG=new Uint8Array(256);{let x=1;for(let i=0;i<255;i++){EXP[i]=x;LOG[x]=i;x<<=1;if(x&256)x^=0x11d}EXP[255]=EXP[0]}
@@ -593,10 +605,10 @@ const prepAgenda=(w,pls,p)=>{const rows=[];for(let i=0;i<7;i++){const d=addD(w,i
    const ls=items.length?items.slice(0,3).map(z=>'• '+esc(z)).join('<br>')+(items.length>3?'<br>… (+'+(items.length-3)+')':''):(a&&a.test?t('testRes'):a&&a.al.length?a.al.map(([id])=>esc((pl.cu.themes.find(y=>y.id===id)||{}).title)).join(', '):'');
    const sup=q.lost||(a&&a.test)?'':sel.length?sel.map(dd=>docIco(dd.kind)+' '+esc(dd.title)).join(' · '):(ths.length&&!ths.every(id=>(p.noDoc||{})[id])?`<i class="k-pend">${t('noSupYet')}</i>`:'');
    return`<li><span><b>${q.a}–${q.b}</b> ${esc(c.label)}, ${esc(g.label)}${q.lost?` <i class="k-hol">${t('lostTag')}</i>`:''}${a&&a.test?` <i class="k-own">${t('testRes')}</i>`:''}${ls?`<div class="mut">${ls}</div>`:''}${sup?`<div>${sup}</div>`:''}</span></li>`}).join('')}</ul>`)}
- return rows.length?`<section class="card"><h2>${t('agendaTitle')}</h2>${rows.join('')}</section>`:''};
-const supCard=(w,lk,th,p)=>th.length?`<section class="card"><h2>${t('wkSup')}</h2><p class="mut">${t('wkSupHelp')}</p>${th.map(x=>`<p class="lab" style="margin-block-start:14px"><b>${esc(x.title)}</b></p>${selRows(x,w,lk,p)}${docsSec(x)}`).join('')}</section>`:'';
+ return rows.length?`<section class="card o"><h2>${t('agendaTitle')}</h2>${rows.join('')}</section>`:''};
+const supCard=(w,lk,th,p)=>th.length?`<section class="card o"><h2>${t('wkSup')}</h2><p class="mut">${t('wkSupHelp')}</p>${th.map(x=>`<p class="lab" style="margin-block-start:14px"><b>${esc(x.title)}</b></p>${selRows(x,w,lk,p)}${docsSec(x)}`).join('')}</section>`:'';
 const valCard=(w,lk,th,p)=>{if(p.ready)return`<section class="card"><p><i class="k-start">${t('valDone')} ✓</i></p><button class="btn ghost" data-act="wpReady" data-id="${w}|${lk}">${t('unready')}</button></section>`;
- const is=prepIssues(w,lk);return`<section class="card"><h2>${t('valTitle')}</h2><ul class="list">${th.map(x=>{const n=DOCS(x.id).filter(d=>p.sel.includes(d.id)).length;return`<li><span>${n||p.noDoc[x.id]?'✓':'○'} ${esc(x.title)} : ${n} ${t('valSup')}</span>${n?'':`<label class="chk"><input type="checkbox" data-wn="${w}|${lk}|${x.id}"${p.noDoc[x.id]?' checked':''}>${t('valNoSup')}</label>`}</li>`}).join('')}</ul><label class="chk"><input type="checkbox" data-wc="${w}|${lk}|me"${p.ok.me?' checked':''}>${t('valMe')}</label><label class="chk"><input type="checkbox" data-wc="${w}|${lk}|st"${p.ok.st?' checked':''}>${t('valSt')}</label><button class="btn" data-act="wpReady" data-id="${w}|${lk}"${is.length?' disabled':''}>${t('valBtn')}</button>${is.length?`<p class="mut">${t('valLeft')}</p>`:''}</section>`};
+ const is=prepIssues(w,lk);return`<section class="card kp"><h2>${t('valTitle')}</h2><ul class="list">${th.map(x=>{const n=DOCS(x.id).filter(d=>p.sel.includes(d.id)).length;return`<li><span>${n||p.noDoc[x.id]?'✓':'○'} ${esc(x.title)} : ${n} ${t('valSup')}</span>${n?'':`<label class="chk"><input type="checkbox" data-wn="${w}|${lk}|${x.id}"${p.noDoc[x.id]?' checked':''}>${t('valNoSup')}</label>`}</li>`}).join('')}</ul><label class="chk"><input type="checkbox" data-wc="${w}|${lk}|me"${p.ok.me?' checked':''}>${t('valMe')}</label><label class="chk"><input type="checkbox" data-wc="${w}|${lk}|st"${p.ok.st?' checked':''}>${t('valSt')}</label><button class="btn" data-act="wpReady" data-id="${w}|${lk}"${is.length?' disabled':''}>${t('valBtn')}</button>${is.length?`<p class="mut">${t('valLeft')}</p>`:''}</section>`};
 const vPrep=()=>{
  if(!pwk)pwk=nextMon();const w=pwk,al=actLv(),lk=al||'all',cls=CL().filter(c=>!al||c.level===al),gs=cls.flatMap(c=>GR(c.id).map(g=>({g,c})));
  const pls=gs.map(x=>({...x,pl:pacing(x.g),ss:wkSess(x.g,w)})),tm={};
@@ -848,16 +860,22 @@ const vBackup=()=>{const pe=pers===true?'persY':pers===false?'persN':'persU';
  if(xt)h+=`<textarea readonly rows="6" id="xt">${esc(xt)}</textarea><button class="btn ghost" data-act="cp">${t('copy')}</button>`;
  return h+`</section>${syncCard()}<section class="card"><h2>${t('restore')}</h2><p class="mut">${t('restoreHelp')}</p><input type="file" id="f">${pkgName?`<p class="mut">${t('fileChosen')} <b>${esc(pkgName)}</b></p>`:''}<label>${t('pkgPw')}<input type="password" id="ip"></label><button class="btn ghost" data-act="doRestore">${t('restore')}</button></section><section class="card"><h2>${t('danger')}</h2><button class="btn danger" data-act="rst">${arm?t('resetSure'):t('delAcct')}</button></section>`};
 
+function collapseCards(){if(!D||['home','stu'].includes(V))return;let n=0;const seen={};
+ document.querySelectorAll('#app > section.card').forEach(c=>{const h=c.firstElementChild;if(!h||h.tagName!=='H2'||c.classList.contains('kp')||c.children.length<3)return;n++;
+  const base='cc-'+V+'-'+(h.textContent||'').trim().slice(0,40);seen[base]=(seen[base]||0)+1;const key=base+(seen[base]>1?'-'+seen[base]:'');
+  const d=document.createElement('details'),s=document.createElement('summary');d.className='cc';d.dataset.k=key;if(OPEN.has(key)?OPEN.get(key):(n<=1||c.classList.contains('o')))d.open=true;
+  while(h.firstChild)s.append(h.firstChild);h.remove();d.append(s);while(c.firstChild)d.append(c.firstChild);c.append(d)})}
 function render(){RT=Date.now();
  document.body.classList.toggle('deco-meca',!!(D&&D.profile&&D.profile.filiere==='Génie mécanique'));
  if(D)applyTheme(D.settings.theme||'auto');
  if(D&&V==='home')cbEnsure();
  $('#lk').innerHTML=D&&S?`<button class="btn ghost" data-go="profile" aria-label="${t('profile')}">👤 ${esc(S.a.name)}</button> <button class="btn ghost" data-act="lock">${t('lock')}</button>`:'';
- if(!D){$('#nav').innerHTML='';$('#app').innerHTML=(flash?`<div class="note">${esc(flash)}</div>`:'')+updBan()+vLogin();return}
- {const gv=V==='stu'?'rep':V,PV=['profile','school','appinfo'].includes(V),G=PV?null:(NG.find(x=>x[1].includes(gv))||NG[0]);$('#nav').innerHTML=`<div class="nr">${NG.map(([k,vs])=>`<button data-go="${vs[0]}"${!PV&&vs.includes(gv)?' aria-current="page"':''}>${t(k)}</button>`).join('')}</div>`+(PV?`<div class="nr sub">${[['profile','pTeacher'],['school','pSchool'],['appinfo','pApp']].map(([v,k])=>`<button data-go="${v}"${V===v?' aria-current="page"':''}>${t(k)}</button>`).join('')}</div>`:G[1].length>1?`<div class="nr sub">${G[1].map(v=>`<button data-go="${v}"${gv===v?' aria-current="page"':''}>${t(v)}</button>`).join('')}</div>`:'')}
+ if(!D){$('#nav').innerHTML='';$('#tabs').innerHTML='';$('#app').innerHTML=(flash?`<div class="note">${esc(flash)}</div>`:'')+updBan()+vLogin();return}
+ {const gv=V==='stu'?'rep':V,PV=['profile','school','appinfo'].includes(V),G=PV?null:(NG.find(x=>x[1].includes(gv))||NG[0]);$('#tabs').innerHTML=NG.map(([k,vs],i)=>`<button data-go="${vs[0]}"${!PV&&vs.includes(gv)?' aria-current="page"':''}><span class="ti">${['🏠','📅','📈','⚙️'][i]}</span><span>${t(k)}</span></button>`).join('');$('#nav').innerHTML=(PV?`<div class="nr sub">${[['profile','pTeacher'],['school','pSchool'],['appinfo','pApp']].map(([v,k])=>`<button data-go="${v}"${V===v?' aria-current="page"':''}>${t(k)}</button>`).join('')}</div>`:G[1].length>1?`<div class="nr sub">${G[1].map(v=>`<button data-go="${v}"${gv===v?' aria-current="page"':''}>${t(v)}</button>`).join('')}</div>`:'')}
  const age=D.settings.lastBackupAt?(Date.now()-Date.parse(D.settings.lastBackupAt))/864e5:null;
  const b=!ok?t('noStore'):S.a.mustChange?t('tmpPw'):(hasData()&&(age===null||age>7))?t('remind'):'';
  $('#app').innerHTML=(flash?`<div class="note">${esc(flash)}</div>`:'')+updBan()+(b?`<div class="warn">${b}</div>`:'')+hintCard(V)+(V==='home'?vHome():V==='calendar'?vCal():V==='week'?vWeek():V==='classes'?vClasses():V==='cur'?vCur():V==='plan'?vPlan():V==='prep'?vPrep():V==='rep'?vRep():V==='adv'?vAdv():V==='obs'?vObs():V==='share'?vShare():V==='stu'?vStu():V==='profile'?vProfile():V==='school'?vSchool():V==='appinfo'?vAppInfo():vBackup());
+ collapseCards();
  if(V==='share')setTimeout(drawQR,0);
 }
 async function exp(){
