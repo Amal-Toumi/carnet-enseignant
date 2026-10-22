@@ -80,7 +80,7 @@ body.deco-meca .card{background:var(--cardt)}
 <main id="app"></main>
 <script>
 (()=>{
-const REAL=!!window.claude,APP_V='2026-10-22 v20',SWOK=!REAL&&'serviceWorker' in navigator&&/^https?:$/.test(location.protocol);
+const REAL=!!window.claude,APP_V='2026-10-22 v21',SWOK=!REAL&&'serviceWorker' in navigator&&/^https?:$/.test(location.protocol);
 if(!REAL){window.claude={use:async n=>n==='downloads'?{save:async({filename,data})=>{const b=new Blob([data],{type:/\.pdf$/.test(filename)?'application/pdf':/\.json$/.test(filename)?'application/json':/\.ics$/.test(filename)?'text/calendar':'application/octet-stream'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);return{status:'saved'}}}:null}}
 const qrMake=(()=>{
  const EXP=new Uint8Array(256),LOG=new Uint8Array(256);{let x=1;for(let i=0;i<255;i++){EXP[i]=x;LOG[x]=i;x<<=1;if(x&256)x^=0x11d}EXP[255]=EXP[0]}
@@ -691,7 +691,20 @@ const vProfile=()=>{
 <section class="card"><h2>${t('prefs')}</h2><p class="lab">${t('days')}</p><div class="row">${dy}</div><label class="chk" style="margin-block-start:14px"><input type="checkbox" data-b="settings.anonymizeExports"${D.settings.anonymizeExports?' checked':''}>${t('anon')}</label></section>${sig()}`};
 const vSchool=()=>{return`<section class="card"><h2>${t('s.institution')}</h2>${['name','address','city','governorate'].map(k=>input('institution.'+k)).join('')}${input('profile.schoolYear')}</section>
 <section class="card"><h2>${t('s.regional')}</h2>${input('regional.directorate')+input('regional.speciality','sel',specOpts(D.regional.speciality))+input('regional.inspector')}</section>`};
-const vAppInfo=()=>{return`<section class="card"><h2>${t('secu')}</h2><label>${t('pwNew')}<input type="password" id="cp-p" autocomplete="new-password"></label><label>${t('pw2')}<input type="password" id="cp-q" autocomplete="new-password"></label><button class="btn ghost" data-act="chPw">${t('chPw')}</button></section>${remCard()}${themeCard()}${stayCard()}${updCard()}${sig()}`};
+const guideCard=()=>`<section class="card"><details class="sec" data-k="guide"${op('guide',true)}><summary><b>Guide : à quoi sert l’appli</b></summary>
+<p><b>Carnet d’enseignant</b> accompagne l’enseignante toute l’année : elle y garde son emploi du temps, ses classes et groupes, le programme officiel et ses documents de cours. L’appli place les séquences sur les semaines, suit l’avancement réel par rapport au programme, signale les retards et aide à les rattraper. Après chaque séance, elle rédige pour vous un petit journal de bord à partager (anonymisé par défaut). Tout fonctionne sans connexion ; les données restent sur l’appareil et peuvent être sauvegardées en ligne (Google Drive ou GitHub) pour les retrouver sur un autre appareil.</p>
+<h3>Pas à pas</h3>
+<ol>
+<li><b>Profil.</b> Touchez votre nom en haut : renseignez l’enseignant, l’école, et choisissez le thème clair ou sombre.</li>
+<li><b>Année.</b> Dans <i>Classes</i>, créez vos classes (chacune a deux groupes) et ajoutez les élèves, à saisir ou à coller. Dans <i>Calendrier</i>, importez le calendrier scolaire (vacances, jours fériés) et ajoutez vos devoirs et événements. Créez l’emploi du temps dans <i>Semaine</i>.</li>
+<li><b>Programme.</b> Dans <i>Programme</i>, importez ou choisissez le programme officiel (thèmes, séquences, situations). Rattachez-y vos documents de cours : liens en ligne et copies hors ligne facultatives.</li>
+<li><b>Préparer la semaine suivante.</b> Chaque semaine, ouvrez <i>Préparation</i> : lisez et confirmez les séances prévues, joignez les documents de la semaine, et reprenez ce qui avait été reporté.</li>
+<li><b>Enseigner.</b> En fin de journée, ouvrez <i>Bilan</i> : cochez ce qui a été fait, les documents utilisés, l’avancement en %, présences, discipline, cahiers contrôlés et élèves. Si l’avancement est inférieur à 100 %, choisissez de reporter le reste aux séances suivantes du groupe. Le journal de bord est écrit automatiquement ; corrigez-le si besoin.</li>
+<li><b>Suivre.</b> <i>Avancement</i> compare les groupes entre eux et au programme (vert à l’heure, jaune puis orange puis rouge en retard). <i>Rythme</i> permet de planifier un rattrapage ou d’ajouter une séance.</li>
+<li><b>Partager.</b> Dans <i>Partage</i>, envoyez un planning, l’avancement ou le journal de bord par PDF, e-mail ou WhatsApp. Les noms d’élèves sont anonymisés sauf si vous choisissez les vrais noms. L’auto-évaluation et les notes personnelles restent privées.</li>
+<li><b>Sauvegarder.</b> Dans <i>Sauvegarde</i>, reliez Google Drive ou GitHub : les modifications sont enregistrées et reçues automatiquement sur les autres appareils du même compte. Pensez à vérifier les mises à jour plus bas dans cette page.</li>
+</ol></details></section>`;
+const vAppInfo=()=>{return`${guideCard()}<section class="card"><h2>${t('secu')}</h2><label>${t('pwNew')}<input type="password" id="cp-p" autocomplete="new-password"></label><label>${t('pw2')}<input type="password" id="cp-q" autocomplete="new-password"></label><button class="btn ghost" data-act="chPw">${t('chPw')}</button></section>${remCard()}${themeCard()}${stayCard()}${updCard()}${sig()}`};
 
 const sig=()=>`<p class="sig" aria-hidden="true">${t("sig1")}<br>${t("sig2")} <svg class="hr" viewBox="0 0 24 24"><path d="M12 21s-8-5.2-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 5.8-8 11-8 11z"/></svg><svg class="ul" viewBox="0 0 120 14"><path d="M3 9c10-7 18 4 30-1s17 4 29-1 18 3 30-1 18 2 26-2"/></svg></p>`;
 const themeCard=()=>{const m=D.settings.theme||'auto',b=(v,k)=>`<button class="btn${m===v?'':' ghost'}" data-act="setTheme" data-id="${v}">${t(k)}</button>`;return`<section class="card"><h2>${t('themeTitle')}</h2><div class="row">${b('auto','themeAuto')}${b('light','themeLight')}${b('dark','themeDark')}</div></section>`};
