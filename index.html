@@ -57,7 +57,7 @@ textarea{resize:vertical}
 .evl li{display:block}.ar{direction:rtl;unicode-bidi:isolate;color:var(--mut);font-size:14px}
 .d.has::after{content:'';position:absolute;inset-block-end:4px;width:6px;height:6px;border-radius:50%;background:var(--pen)}.d.sel{box-shadow:0 0 0 2px var(--pen)}
 .k-own{background:var(--pen);color:var(--pent)}.evi .btn{margin-block-start:6px;padding:4px 12px}
-.top{display:flex;justify-content:space-between;align-items:center;gap:8px}.top .btn{margin:0;padding:4px 12px;font-size:14px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:8px}#lk{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;max-width:62%}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-inline-end:6px;vertical-align:-1px;border:1.5px solid var(--mut);background:var(--mut)}.dot.on{background:#2e9e57;border-color:#2e9e57;box-shadow:0 0 0 3px rgba(46,158,87,.2)}.dot.off{background:#d64545;border-color:#d64545}.dot.warn{background:#e0a020;border-color:#e0a020}.dot.loc{background:transparent}#lk .sdt{flex:1 0 100%;text-align:right;border:0;background:none;color:var(--mut);font:inherit;font-size:11px;padding:0;cursor:pointer}.top .btn{margin:0;padding:4px 12px;font-size:14px}
 .bul{margin:4px 0 8px;padding-inline-start:20px}.th{padding:10px 14px}.th summary{cursor:pointer}
 .k-yel{background:var(--wbg);color:var(--warn);border:1px solid var(--warn)}.k-org{background:var(--warn);color:var(--pent)}
 .bar{position:relative;height:14px;background:var(--soft);border-radius:7px;overflow:hidden;margin:6px 0}.bar .fill{position:absolute;inset-block:0;inset-inline-start:0;background:var(--pen)}.bar .fill.orange{background:var(--warn)}.bar .fill.green{background:var(--ok)}.fill.ahead{background:#3b82f6}.k-ahead{background:#dbeafe;color:#1e3a8a;border:1px solid #3b82f6}details.prog{margin-block:12px}details.prog>summary{cursor:pointer;font-size:17px;font-weight:700;color:var(--pen);padding:10px 0}details.sec{margin-block:4px}details.sec>summary{cursor:pointer;font-weight:600;padding:6px 0}details.sub>summary{cursor:pointer;font-weight:600}.bar .mk{position:absolute;inset-block:0;width:3px;background:var(--margin)}.bar .mk.own{background:var(--ink);opacity:.6}
@@ -92,7 +92,7 @@ details.cc{margin:0}details.cc>summary{cursor:pointer;list-style:none;font-size:
 <main id="app"></main>
 <script>
 (()=>{
-const REAL=!!window.claude,APP_V='2026-10-22 v29',SWOK=!REAL&&'serviceWorker' in navigator&&/^https?:$/.test(location.protocol);
+const REAL=!!window.claude,APP_V='2026-10-22 v30',SWOK=!REAL&&'serviceWorker' in navigator&&/^https?:$/.test(location.protocol);
 if(!REAL){window.claude={use:async n=>n==='downloads'?{save:async({filename,data})=>{const b=new Blob([data],{type:/\.pdf$/.test(filename)?'application/pdf':/\.json$/.test(filename)?'application/json':/\.ics$/.test(filename)?'text/calendar':'application/octet-stream'}),u=URL.createObjectURL(b),a=document.createElement('a');a.href=u;a.download=filename;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),4000);return{status:'saved'}}}:null}}
 const qrMake=(()=>{
  const EXP=new Uint8Array(256),LOG=new Uint8Array(256);{let x=1;for(let i=0;i<255;i++){EXP[i]=x;LOG[x]=i;x<<=1;if(x&256)x^=0x11d}EXP[255]=EXP[0]}
@@ -809,7 +809,10 @@ const syMeta=()=>{try{return JSON.parse(localStorage.getItem('tca:sync:'+S.id)||
 const syPutMeta=m=>{try{localStorage.setItem('tca:sync:'+S.id,JSON.stringify(m))}catch(e){}};
 const getBase=async()=>{try{const x=localStorage.getItem('tca:base:'+S.id);return x?await unseal(S.key,JSON.parse(x)):null}catch(e){return null}};
 const putBase=async o=>{try{localStorage.setItem('tca:base:'+S.id,JSON.stringify(await seal(S.key,o)))}catch(e){}};
-const syFlash=(s,msg)=>{syState={s,msg};if(V==='backup')render()};
+const syFlash=(s,msg)=>{syState={s,msg};if(V==='backup')render();else lkUp()};
+const lkInfo=()=>{let m={};try{m=syMeta()}catch(e){}const pv=SY().prov||'none',off=typeof navigator!=='undefined'&&navigator.onLine===false;let c,l;if(off){c='off';l='Hors connexion'}else if(pv==='none'){c='loc';l='Cet appareil seulement'}else if(syState&&['err','pw','gneed','cfg'].includes(syState.s)){c='warn';l='Synchro à vérifier'}else{c='on';l='En ligne'}const d=m.at?new Date(m.at):null;let ds='';if(d&&!isNaN(d))ds=d.toDateString()===new Date().toDateString()?'aujourd’hui '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):d.toLocaleDateString('fr-FR',{day:'2-digit',month:'2-digit'})+' '+d.toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});else if(pv!=='none')ds='jamais';return{c,l,ds}};
+const lkHtml=()=>{if(!D||!S)return'';const i=lkInfo(),tx=i.l+(i.ds?' · synchro '+i.ds:'');return`<button class="btn ghost" data-go="profile" aria-label="${t('profile')}" title="${esc(tx)}"><i class="dot ${i.c}"></i>👤 ${esc(S.a.name)}</button> <button class="btn ghost" data-act="lock">${t('lock')}</button><button class="sdt" data-go="backup">${esc(tx)}</button>`};
+const lkUp=()=>{const e=$('#lk');if(e)e.innerHTML=lkHtml()};
 const GH={ok:()=>!!(SY().repo&&SY().token),
  async get(prev){const h=ghH(SY().token);if(prev&&prev.etag)h['If-None-Match']=prev.etag;const r=await fetch(ghUrl(SY().repo,ghPath()),{headers:h});if(r.status===304)return{same:true};if(r.status===404)return null;if(!r.ok)throw new Error('GET '+r.status);const j=await r.json();let c=j.content;if(!c||j.encoding==='none'){const b=await fetch('https://api.github.com/repos/'+SY().repo+'/git/blobs/'+j.sha,{headers:ghH(SY().token)});if(!b.ok)throw new Error('GET '+b.status);c=(await b.json()).content}return{ver:j.sha,etag:(r.headers&&r.headers.get&&r.headers.get('ETag'))||'',text:d8(c)}},
  async put(text,ver){const r=await fetch(ghUrl(SY().repo,ghPath()),{method:'PUT',headers:{...ghH(SY().token),'Content-Type':'application/json'},body:JSON.stringify({message:'Sauvegarde '+now().slice(0,16),content:u8(text),sha:ver||undefined})});if(r.status===409||r.status===422)throw Object.assign(new Error('conflit'),{conflict:true});if(!r.ok)throw new Error('PUT '+r.status);return{ver:(await r.json()).content.sha,etag:''}}};
@@ -867,7 +870,7 @@ function render(){RT=Date.now();if(LASTV!==null&&LASTV!==V&&D&&D.settings.keepOp
  document.body.classList.toggle('deco-meca',!!(D&&D.profile&&D.profile.filiere==='Génie mécanique'));
  if(D)applyTheme(D.settings.theme||'auto');
  if(D&&V==='home')cbEnsure();
- $('#lk').innerHTML=D&&S?`<button class="btn ghost" data-go="profile" aria-label="${t('profile')}">👤 ${esc(S.a.name)}</button> <button class="btn ghost" data-act="lock">${t('lock')}</button>`:'';
+ $('#lk').innerHTML=lkHtml();
  if(!D){$('#nav').innerHTML='';$('#tabs').innerHTML='';$('#app').innerHTML=(flash?`<div class="note">${esc(flash)}</div>`:'')+updBan()+vLogin();return}
  {const gv=V==='stu'?'rep':V,PV=['profile','school','appinfo'].includes(V),G=PV?null:(NG.find(x=>x[1].includes(gv))||NG[0]);$('#tabs').innerHTML=NG.map(([k,vs],i)=>`<button data-go="${vs[0]}"${!PV&&vs.includes(gv)?' aria-current="page"':''}><span class="ti">${['📝','📚','📊','⚙️'][i]}</span><span>${t(k)}</span></button>`).join('');$('#nav').innerHTML=(PV?`<div class="nr sub">${[['profile','pTeacher'],['school','pSchool'],['appinfo','pApp']].map(([v,k])=>`<button data-go="${v}"${V===v?' aria-current="page"':''}>${t(k)}</button>`).join('')}</div>`:G[1].length>1?`<div class="nr sub">${G[1].map(v=>`<button data-go="${v}"${gv===v?' aria-current="page"':''}>${t(v)}</button>`).join('')}</div>`:'')}
  const age=D.settings.lastBackupAt?(Date.now()-Date.parse(D.settings.lastBackupAt))/864e5:null;
@@ -1079,7 +1082,7 @@ if(SWOK){const had=!!navigator.serviceWorker.controller;navigator.serviceWorker.
 if('serviceWorker' in navigator&&/^https?:$/.test(location.protocol))addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 if(localStorage.getItem('tca:sess')!=='1')render();
 (async()=>{try{if(await Promise.race([resume(),new Promise(r=>setTimeout(()=>r(false),1500))]))V='home'}catch(e){}render();syncNow('open')})();
-document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')syncNow('open');else if(syDirty)syncNow('hide')});addEventListener('online',()=>syncNow('open'));setInterval(()=>{if(document.visibilityState!=='hidden')syncNow('poll')},60000);
+document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')syncNow('open');else if(syDirty)syncNow('hide')});addEventListener('online',()=>{lkUp();syncNow('open')});addEventListener('offline',lkUp);setInterval(()=>{if(document.visibilityState!=='hidden')syncNow('poll')},60000);
 })();
 </script>
 </body>
